@@ -1,5 +1,7 @@
 package com.mobilemoney.model;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -35,5 +37,20 @@ public class Client {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
+	/*public Boolean checkClient(int idC) {
+    	List<Client> client=this.clientRepository.findAll();
+		int size=client.size();
+		int i=0;
+		boolean val=false;
+		while(i<=size) {
+			if(Integer.parseInt(client.get(i).id)==idClient) {
+				val=true;
+				break;
+				}
+			i++;
+			if(i==size) {val=false;}
+		}
+		return val;
+    }*/
+	
 }

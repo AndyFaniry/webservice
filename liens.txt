@@ -1,0 +1,22 @@
+GET:http://localhost:8080/client/findall
+
+POST:http://localhost:8080/client/create
+{
+    "_id":"4",
+    "nom":"newClient",
+    "email":"newClient@gmail.com"
+}	
+
+POST:http://localhost:8080/compte/login
+{
+    "num":"0323233232",
+    "mdp":"Maria"
+}
+
+POST:http://localhost:8080/credit/ajout
+{
+    "token":"94272408182729e5f5e0632349b06f1d",
+    "code":"12345678901234",
+    "valeur":1000,
+    "daty":"2021-03-17T11:05:03.119131400"
+}

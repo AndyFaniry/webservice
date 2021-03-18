@@ -3,9 +3,15 @@ package com.mobilemoney.model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.mobilemoney.bdb.ConnectionPstg;
 
 public class Credit {
 	int idCredit;
@@ -78,6 +84,23 @@ public class Credit {
 		setValeur(valeur);
 		setDaty(daty);
 	}
+	public Credit(String token, String code, int valeur, LocalDateTime daty) throws Exception{
+		Connection co= new ConnectionPstg().getConnection();
+		try {
+			int idCompte= Token.verificationToken(token,co);
+			setIdCompte(idCompte);
+			setCode(code);
+			setValeur(valeur);
+			setDaty(daty);
+		}
+		catch(Exception ex) {
+			throw ex;
+		}
+		finally {
+			if(co != null) co.close();
+		}
+	}
+	
 	public static void insertMouvementCredit(Credit credit,Connection co) throws Exception {
 		PreparedStatement st = null;
 		try {
@@ -153,5 +176,24 @@ public class Credit {
 		}
 		return crd.get(0);
     }
+	public static Response ajoutCreditWebService(Credit credit) throws Exception {
+		Connection co= new ConnectionPstg().getConnection();
+		Response reponse= new Response();
+		try {
+			Credit.ajoutCredit(credit,co);
+			Credit crd= Credit.getSoldeCredit(credit.getIdCompte(),co);
+			reponse.data= crd;
+			reponse.message= null;
+			reponse.code="200";
+		}
+		catch(Exception ex) {
+			reponse.code="400";
+			reponse.message= ex.getMessage();
+		}
+		finally {
+			if(co != null) co.close();
+		}
+		return reponse;
+	}
 
 }

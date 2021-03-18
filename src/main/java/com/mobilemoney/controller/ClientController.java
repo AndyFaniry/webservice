@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mobilemoney.model.Client;
 import com.mobilemoney.model.ClientRepository;
+import com.mobilemoney.model.Response;
 
 
 
@@ -21,14 +22,22 @@ public class ClientController {
 	@Autowired
 	public ClientRepository clientRepository;
 	
-	@GetMapping("/all")
-	public List<Client> getAllClient(){
-		return clientRepository.findAll();
+	@GetMapping("/client/findall")
+	public Response getAllClient(){
+		Response reponse= new Response();
+		reponse.data= clientRepository.findAll();
+		reponse.message= null;
+		reponse.code= "200" ;
+		return reponse;
 	}
 	
-	@PostMapping(value="/create")
-	public String createClient(@RequestBody Client client) {
+	@PostMapping(value="/client/create")
+	public Response createClient(@RequestBody Client client) {
+		Response reponse= new Response();
 		Client insertClient = clientRepository.insert(client);
-		return "client creer"+insertClient.getNom();
+		reponse.data= insertClient;
+		reponse.message= null;
+		reponse.code= "200" ;
+		return reponse;
 	}
 }
