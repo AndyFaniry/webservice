@@ -11,7 +11,7 @@ import com.mobilemoney.model.Response;
 @RestController
 public class CompteController {
 	@PostMapping(value="/compte/login")
-	public Response createClient(@RequestBody Compte compte) throws Exception {
+	public Response loginClient(@RequestBody Compte compte) throws Exception {
 		return compte.login();
 	}
 	

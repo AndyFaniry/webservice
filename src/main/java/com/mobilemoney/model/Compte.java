@@ -16,10 +16,16 @@ import com.mobilemoney.fonction.Fonction;
 public class Compte {
 	int idCompte;
 	int idClient;
+	int idOperateur;
+	public int getIdOperateur() {
+		return idOperateur;
+	}
+	public void setIdOperateur(int idOperateur) {
+		this.idOperateur = idOperateur;
+	}
 	String num;
 	String mdp;
-	@Autowired
-	public ClientRepository clientRepository;
+
 	public int getIdCompte() {
 		return idCompte;
 	}
@@ -45,18 +51,18 @@ public class Compte {
 		this.mdp = mdp;
 	}
 	public Compte() {}
-	public Compte(int idCompte, int idClient, String num, String mdp) {
-		super();
-		this.idCompte = idCompte;
-		this.idClient = idClient;
-		this.num = num;
-		this.mdp = mdp;
+	public Compte(int idCompte, int idClient,int idOperateur, String num, String mdp) {
+		setIdCompte(idCompte);
+		setIdClient(idClient);
+		setIdOperateur(idOperateur);
+		setNum(num);
+		setMdp(mdp);
 	}
-	public Compte(int idClient, String num, String mdp) {
-		super();
-		this.idClient = idClient;
-		this.num = num;
-		this.mdp = mdp;
+	public Compte(int idClient,int idOperateur, String num, String mdp) {
+		setIdClient(idClient);
+		setIdOperateur(idOperateur);
+		setNum(num);
+		setMdp(mdp);
 	}
 	public static ArrayList<Compte> findAllCompte(String sql,Connection co){
 		PreparedStatement preparedStatement = null;
@@ -68,9 +74,10 @@ public class Compte {
 			while (resultSet.next()) {
 				int id=resultSet.getInt("idCompte");
 				int idC=resultSet.getInt("idClient");
+				int idOp=resultSet.getInt("idOperateur");
 				String num=resultSet.getString("num");
 				String mdp=resultSet.getString("mdp");
-				Compte c=new Compte(id,idC,num,mdp);
+				Compte c=new Compte(id,idC,idOp,num,mdp);
 				cpt.add(c);
 			}
 		}catch(Exception e) {
@@ -79,7 +86,7 @@ public class Compte {
 		return cpt;
     }
 	public static Compte valideLogin(String num, String mdp, Connection co) throws Exception {
-		String sql= "select * from Compte where num='"+num+"' and mdp=md5('"+mdp+"')";
+		String sql= "select * from Compte where num='"+num+"' and mdp=md5('@client123"+mdp+"')";
 		ArrayList<Compte> comptes= Compte.findAllCompte(sql, co);
 		if(comptes.size()!=1) throw new Exception("mot de passe ou numero non valide");
 		return comptes.get(0);
@@ -95,7 +102,7 @@ public class Compte {
 				st = co.prepareStatement(sql);
 				st.setInt(1,this.getIdClient());
 				st.setString(2,this.getNum());
-				st.setString(3,this.getMdp());
+				st.setString(3,"@client123"+this.getMdp());
 				st.execute();
 				co.commit();
 			}

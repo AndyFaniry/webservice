@@ -93,5 +93,46 @@ public class Token {
 		}
 		return idCompte;
 	}
+	public static String getTokenAdmin(Operateur op,Connection co) throws Exception {
+		String daty= Fonction.getDateNow(co);
+		String mdp= op.getMdp();
+		String val= daty+"@dmin"+mdp;
+		String token= Fonction.addSha1(val, co);
+		return token;
+	}
+	public static String insertTokenAdmin(Operateur op,Connection co) throws Exception {
+		String token= getTokenAdmin(op,co);
+		PreparedStatement st = null;
+		try {
+			String sql= "insert into tokenAdmin(idTokenAdmin,idOperateur,valeur,daty,statu) VALUES (nextval('seqToken'),?,?,CURRENT_TIMESTAMP,1)";
+			st = co.prepareStatement(sql);
+			st.setInt(1,op.getIdOperateur());
+			st.setString(2,token);
+			st.execute();
+			co.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(st != null) st.close();
+		}
+		return token;
+	}
+	public static int verificationTokenAdmin(String token,Connection co) throws Exception {
+		String sql= "select * from tokenAdmin where valeur=? and statu=1";
+		PreparedStatement st = null;
+		ResultSet resultSet = null;
+		int idOp=0;
+		try {
+			st = co.prepareStatement(sql);
+			st.setString(1,token);
+			resultSet = st.executeQuery();
+			while (resultSet.next()) {
+				idOp =resultSet.getInt("idoperateur");			
+			}
+		}catch(Exception e) {
+			e.getMessage();
+		}
+		return idOp;
+	}
     
 }
