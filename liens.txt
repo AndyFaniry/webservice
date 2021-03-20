@@ -13,16 +13,26 @@ POST:http://localhost:8080/compte/login
     "mdp":"maria"
 }
 
-POST:http://localhost:8080/credit/ajout
-{
-    "token":"94272408182729e5f5e0632349b06f1d",
-    "code":"12345678901234",
-    "valeur":1000,
-    "daty":"2021-03-17T11:05:03.119131400"
-}
-
 POST:http://localhost:8080/admin/login
 {
     "nom":"telma",
     "mdp":"telma"
 }
+POST:http://localhost:8080/admin/depot
+token bearer:0bdafb21ea38b3921386707892692500 (anle Admin)
+
+POST:http://localhost:8080/admin/retrait
+token bearer:0bdafb21ea38b3921386707892692500 (anle Admin)
+
+POST:http://localhost:8080/admin/valider/mouvement
+token bearer:0bdafb21ea38b3921386707892692500 (anle Admin)
+{
+   "idMouvement":5
+}
+
+POST:http://localhost:8080/compte/depot
+token bearer: ad4c138d1c56b099d214bd44b105e6ed (anle compte client)
+{
+    "valeur":100
+}
+
