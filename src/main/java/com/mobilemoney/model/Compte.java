@@ -64,29 +64,33 @@ public class Compte {
 		setNum(num);
 		setMdp(mdp);
 	}
-	public static ArrayList<Compte> findAllCompte(String sql,Connection co){
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		ArrayList<Compte> cpt=new ArrayList<Compte>();
+	public static ArrayList<Compte> findAllCompte(String sql,Connection co) throws Exception{
+		PreparedStatement st = null;
+		ResultSet result = null;
+		ArrayList<Compte> array = new ArrayList<Compte>();
 		try {
-			preparedStatement = co.prepareStatement(sql);
-			resultSet = preparedStatement.executeQuery();
-			while (resultSet.next()) {
-				int id=resultSet.getInt("idCompte");
-				int idC=resultSet.getInt("idClient");
-				int idOp=resultSet.getInt("idOperateur");
-				String num=resultSet.getString("num");
-				String mdp=resultSet.getString("mdp");
+			st = co.prepareStatement(sql);
+			result = st.executeQuery(); 
+			while(result.next()) {
+				int id=result.getInt("idcompte");
+				int idC=result.getInt("idclient");
+				int idOp=result.getInt("idoperateur");
+				String num=result.getString("num");
+				String mdp=result.getString("mdp");
 				Compte c=new Compte(id,idC,idOp,num,mdp);
-				cpt.add(c);
+				System.out.println(c.getNum());
+				array.add(c);
 			}
 		}catch(Exception e) {
 			e.getMessage();
+		}finally {
+			if(st!=null) st.close();
 		}
-		return cpt;
+		return array;
     }
 	public static Compte valideLogin(String num, String mdp, Connection co) throws Exception {
 		String sql= "select * from Compte where num='"+num+"' and mdp=md5('@client123"+mdp+"')";
+		System.out.println(sql);
 		ArrayList<Compte> comptes= Compte.findAllCompte(sql, co);
 		if(comptes.size()!=1) throw new Exception("mot de passe ou numero non valide");
 		return comptes.get(0);
@@ -131,6 +135,28 @@ public class Compte {
 			if(co != null) co.close();
 		}
 		return reponse;
+	}
+	public static Response depotMoney(String token,String valeur) throws Exception {
+		Connection co= new ConnectionPstg().getConnection();
+		Response reponse= new Response();
+		try {
+			int idCompte= Token.verificationToken(token,co);
+			MouvementMoney.insertMouvement(idCompte,valeur,co);
+			ArrayList<MouvementMoney> mouv= MouvementMoney.getLastMouvBYCompte(idCompte,co);
+			reponse.data= mouv;
+			reponse.message= "depot effectuer veuillez attendre la validation";
+			reponse.code="200";
+		}
+		catch(Exception ex) {
+			reponse.code="400";
+			reponse.message= ex.getMessage();
+		}
+		finally {
+			if(co != null) co.close();
+		}
+		return reponse;
+		
+		
 	}
 	
 

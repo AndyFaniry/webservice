@@ -52,6 +52,10 @@ public class Token {
 		this.timestamp = timestamp;
 		this.statu = statu;
 	}
+	public static String deleteBearerToToken(String bearerToken) {
+		String[] token= bearerToken.split(" ");
+		return token[1];
+	}
 	public static String getToken(Compte compte,Connection co) throws Exception {
 		String daty= Fonction.getDateNow(co);
 		String mdp= compte.getMdp();
@@ -86,10 +90,12 @@ public class Token {
 			st.setString(1,token);
 			resultSet = st.executeQuery();
 			while (resultSet.next()) {
-				idCompte =resultSet.getInt("idcompte");			
+				idCompte =resultSet.getInt("idcompte");	
 			}
 		}catch(Exception e) {
 			e.getMessage();
+		}finally {
+			if(st!=null) st.close();
 		}
 		return idCompte;
 	}
@@ -134,5 +140,4 @@ public class Token {
 		}
 		return idOp;
 	}
-    
 }

@@ -19,21 +19,10 @@ public class Main {
 		Connection co= new ConnectionPstg().getConnection();
 		String retour="debut";
 		try {
-			String nom="telma";
-			String mdp="telma";
-			//Operateur op= Operateur.valideLogin(nom,mdp,co);
-			//System.out.println(op.getPrefixe());
-			String token="c24e6f2885b6affee1188f88fc98cf79";
-			//Response r= Operateur.getDepotNonValide(token);
-			//String sql="select * from v_depot_non_valide where idOperateur=1";
-			ArrayList<MouvementMoney> aray= Operateur.getMouvDepot(token,co);
-			System.out.println(aray.size());
-			for(int i= 0; i<aray.size(); i++) {
-				System.out.println(aray.get(i).getNum());
-			}
-			 //Response r= Operateur.getDepotNonValide(token);
-			
-			
+			String token="ad4c138d1c56b099d214bd44b105e6ed";
+			String valeur="100";
+			//MouvementMoney.insertMouvement(idCompte,valeur,co);
+			Response r= Compte.depotMoney(token,valeur);
 		}
 		catch(Exception ex) {
 			retour= ex.getMessage();
@@ -44,6 +33,4 @@ public class Main {
 		
 
 	}
-	
-
 }

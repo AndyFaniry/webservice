@@ -84,13 +84,13 @@ public class Credit {
 		setValeur(valeur);
 		setDaty(daty);
 	}
-	public Credit(String token, String code, int valeur, LocalDateTime daty) throws Exception{
+	public Credit(String token, String code, String valeur, String daty) throws Exception{
 		Connection co= new ConnectionPstg().getConnection();
 		try {
 			int idCompte= Token.verificationToken(token,co);
 			setIdCompte(idCompte);
 			setCode(code);
-			setValeur(valeur);
+			setValeur(Integer.parseInt(valeur));
 			setDaty(daty);
 		}
 		catch(Exception ex) {

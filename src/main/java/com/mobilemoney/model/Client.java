@@ -1,5 +1,6 @@
 package com.mobilemoney.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -52,5 +53,9 @@ public class Client {
 		}
 		return val;
     }*/
+	public static ArrayList<Client> getListeClien(){
+		ArrayList<Client> cl= new ArrayList<Client>();
+		return cl;
+	}
 	
 }

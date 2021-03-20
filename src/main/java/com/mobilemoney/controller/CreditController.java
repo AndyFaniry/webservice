@@ -11,8 +11,8 @@ import com.mobilemoney.model.Response;
 @CrossOrigin(origins="*",allowedHeaders="*")
 @RestController
 public class CreditController {
-	@PostMapping(value="/credit/ajout")
+	/*@PostMapping(value="/credit/ajout")
 	public Response createClient(@RequestBody Credit credit) throws Exception {
 		return Credit.ajoutCreditWebService(credit);
-	}
+	}*/
 }
