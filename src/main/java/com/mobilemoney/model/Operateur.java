@@ -116,7 +116,7 @@ public class Operateur {
 	}
 	public static ArrayList<MouvementMoney> getMouvDepotNonValide(String token,Connection co) throws Exception {
 		ArrayList<MouvementMoney> val= new ArrayList<MouvementMoney>();
-		int idOperateur= Token.verificationTokenAdmin(token,co);
+		String idOperateur= Token.verificationTokenAdmin(token,co);
 		String sql="select * from v_depot_non_valide where idOperateur="+idOperateur;
 		System.out.println("sql andramana="+sql);
 		val= MouvementMoney.findMouvementMoney(sql,co);
@@ -143,7 +143,7 @@ public class Operateur {
 	}
 	public static ArrayList<MouvementMoney> getMouvRetraitNonValide(String token,Connection co) throws Exception {
 		ArrayList<MouvementMoney> val= new ArrayList<MouvementMoney>();
-		int idOperateur= Token.verificationTokenAdmin(token,co);
+		String idOperateur= Token.verificationTokenAdmin(token,co);
 		String sql="select * from v_retrait_non_valide where idOperateur="+idOperateur;
 		System.out.println("sql andramana="+sql);
 		val= MouvementMoney.findMouvementMoney(sql,co);
@@ -172,12 +172,12 @@ public class Operateur {
 	public static Response validerMouvement(String token, String idMouv) throws Exception{
 		Connection co= new ConnectionPstg().getConnection();
 		Response reponse= new Response();
-		int idMouvementMoney= new Integer(idMouv).intValue();
-		int idAdmin= Token.verificationTokenAdmin(token, co);
+		int idMouvementMoney= Integer.parseInt(idMouv);
+		String idAdmin= Token.verificationTokenAdmin(token, co);
 		ArrayList<MouvementMoney> mouvs= new ArrayList<MouvementMoney>();
 		
 		try {
-			if(idAdmin!=0) {
+			if(idAdmin!=null) {
 				MouvementMoney.upDateMouvementMoney(idMouvementMoney,co);
 				mouvs= MouvementMoney.findMouvementMoneyById(idMouvementMoney,co);
 				reponse.data= mouvs;

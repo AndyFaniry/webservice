@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mobilemoney.bdb.ConnectionPstg;
 import com.mobilemoney.controller.ClientController;
+import com.mobilemoney.model.offre.*;
 
 
 public class Main {
@@ -19,10 +20,20 @@ public class Main {
 		Connection co= new ConnectionPstg().getConnection();
 		String retour="debut";
 		try {
-			String token="ad4c138d1c56b099d214bd44b105e6ed";
-			String valeur="100";
-			//MouvementMoney.insertMouvement(idCompte,valeur,co);
-			Response r= Compte.depotMoney(token,valeur);
+			String token="7c81eb8f2a38f04b8b6820f7525f0231";
+			//String idOperateur= Token.verificationTokenAdmin(token, co);
+			String nom= "offre vaovao Be2";
+			String code="*999*";
+			String prix="200";
+			String validite= "3";
+			//Response r= Offre.insertOffre(token,nom,code, prix,validite);
+			String sql="select * from detailOffreAppel";
+			ArrayList<DetailsOffreAppel> offre=  DetailsOffreAppel.findAllDetailOffreAppel(sql,co);
+			System.out.println(offre.size());
+			
+			//ArrayList<Offre> offre= findAllDetailOffreAppel(String sql,Connection co);
+			
+			
 		}
 		catch(Exception ex) {
 			retour= ex.getMessage();

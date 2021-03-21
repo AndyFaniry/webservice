@@ -18,10 +18,10 @@ POST:http://localhost:8080/admin/login
     "nom":"telma",
     "mdp":"telma"
 }
-POST:http://localhost:8080/admin/depot
+GET:http://localhost:8080/admin/depot
 token bearer:0bdafb21ea38b3921386707892692500 (anle Admin)
 
-POST:http://localhost:8080/admin/retrait
+GET:http://localhost:8080/admin/retrait
 token bearer:0bdafb21ea38b3921386707892692500 (anle Admin)
 
 POST:http://localhost:8080/admin/valider/mouvement
@@ -35,4 +35,36 @@ token bearer: ad4c138d1c56b099d214bd44b105e6ed (anle compte client)
 {
     "valeur":100
 }
+
+POST:http://localhost:8080/admin/offre/ajout
+token bearer:0bdafb21ea38b3921386707892692500 (anle Admin)
+{
+    "nom":"offre vaovao",
+    "code":"*999#",
+    "prix":"200",
+    "validite":"1"
+}
+
+POST:http://localhost:8080/admin/offre/appel/insert
+{
+    "idOffre":"3",
+    "valeurTTC":"300",
+    "puMemeOp":"1",
+    "puAutreOp":"4"
+}
+
+POST:http://localhost:8080/admin/offre/internet/insert
+{
+    "idOffre":"9",
+    "mo":"50"
+}
+
+POST:http://localhost:8080/admin/offre/sms/insert
+{
+    "idOffre":"9",
+    "nbrSms":"10"
+}
+
+
+
 

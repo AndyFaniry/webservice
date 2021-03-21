@@ -123,17 +123,17 @@ public class Token {
 		}
 		return token;
 	}
-	public static int verificationTokenAdmin(String token,Connection co) throws Exception {
+	public static String verificationTokenAdmin(String token,Connection co) throws Exception {
 		String sql= "select * from tokenAdmin where valeur=? and statu=1";
 		PreparedStatement st = null;
 		ResultSet resultSet = null;
-		int idOp=0;
+		String idOp= null;
 		try {
 			st = co.prepareStatement(sql);
 			st.setString(1,token);
 			resultSet = st.executeQuery();
 			while (resultSet.next()) {
-				idOp =resultSet.getInt("idoperateur");			
+				idOp =resultSet.getString("idoperateur");			
 			}
 		}catch(Exception e) {
 			e.getMessage();

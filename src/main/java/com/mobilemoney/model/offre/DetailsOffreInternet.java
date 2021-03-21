@@ -1,0 +1,90 @@
+package com.mobilemoney.model.offre;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+import com.mobilemoney.bdb.ConnectionPstg;
+import com.mobilemoney.model.Response;
+
+public class DetailsOffreInternet {
+	int idOInternet;
+	int idOffre;
+	int mo;
+	public int getIdOInternet() {
+		return idOInternet;
+	}
+	public void setIdOInternet(int idOInternet) {
+		this.idOInternet = idOInternet;
+	}
+	public int getIdOffre() {
+		return idOffre;
+	}
+	public void setIdOffre(int idOffre) {
+		this.idOffre = idOffre;
+	}
+	public int getMo() {
+		return mo;
+	}
+	public void setMo(int mo) {
+		this.mo = mo;
+	}
+	public DetailsOffreInternet(int idOInternet, int idOffre, int mo) {
+		super();
+		setIdOInternet(idOInternet);
+		setIdOffre(idOffre);
+		setMo(mo);
+	}
+	public static ArrayList<DetailsOffreInternet> findAllDetailOffreInternet(String sql,Connection co) throws Exception{
+		PreparedStatement st = null;
+		ResultSet result = null;
+		ArrayList<DetailsOffreInternet> array = new ArrayList<DetailsOffreInternet>();
+		try {
+			st = co.prepareStatement(sql);
+			result = st.executeQuery(); 
+			while(result.next()) {
+				int idDetailOffreInternet=result.getInt("idOInternet");
+				int idOffre=result.getInt("idOffre");
+				int mo=result.getInt("mo");
+				DetailsOffreInternet offre=new DetailsOffreInternet(idDetailOffreInternet,idOffre,mo);
+				array.add(offre);
+			}
+		}catch(Exception e) {
+			e.getMessage();
+		}finally {
+			if(st!=null) st.close();
+		}
+		return array;
+    }
+
+	public static Response insertOffreInternet(String idOffre, String mo) throws Exception {
+		Connection co= new ConnectionPstg().getConnection();
+		Response r= new Response();
+		r.code= "200";
+		r.data=null;
+		int idOffre1= Integer.parseInt(idOffre);
+		int mo1= Integer.parseInt(mo);
+		PreparedStatement st = null;
+		try {
+			String sql= "insert into detailOffreInternet(idOInternet, idOffre,mo) VALUES (nextval('seqDetailsOffreInternet'),?,?)";
+			st = co.prepareStatement(sql);
+			st.setInt(1,idOffre1);
+			st.setInt(2,mo1);
+			st.execute();
+			co.commit();
+			r.data= null ;
+			r.message= "la nouvelle details offre Internet inserer";
+			
+		} catch (Exception e) {
+			r.code= "400";
+			r.message= e.getMessage();
+			e.printStackTrace();
+		} finally {
+			if(st != null) st.close();
+			if(co!=null) co.close();
+		}
+		return  r;
+	}
+	
+}
