@@ -1,15 +1,17 @@
 package com.mobilemoney.model;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import org.bson.Document;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.mobilemoney.bdb.ConnectionMongo;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
 
 
-@Document(collection="client")
 public class Client {
-	@Id
 	String id;
 	String nom;
 	String email;
@@ -53,9 +55,56 @@ public class Client {
 		}
 		return val;
     }*/
-	public static ArrayList<Client> getListeClien(){
-		ArrayList<Client> cl= new ArrayList<Client>();
+	public static ArrayList<Client> getListeClient() throws Exception{
+		MongoDatabase db=new ConnectionMongo().connect();
+		MongoCollection<Document> coll=db.getCollection("client");
+		ArrayList<Client> cl=new ArrayList<Client>();
+		MongoCursor<Document> curs=coll.find().iterator();
+		while(curs.hasNext())
+	    {
+			Document d=curs.next();
+			String id= d.getInteger("_id").toString();
+			String nom= d.getString("nom");
+			String email= d.getString("email");
+	        Client c=new Client(id,nom,email);
+	        cl.add(c);
+	    }
+		curs.close();
 		return cl;
 	}
-	
+	public static Client findClientById(int idC) throws Exception{
+		MongoDatabase db=new ConnectionMongo().connect();
+		MongoCollection<Document> coll=db.getCollection("client");
+		Client c=null;
+		MongoCursor<Document> curs=coll.find(new Document("_id", idC)).iterator();
+		while(curs.hasNext())
+	    {
+			Document d=curs.next();
+			String id= d.getInteger("_id").toString();
+			String nom= d.getString("nom");
+			String email= d.getString("email");
+	         c=new Client(id,nom,email);
+	    }
+		curs.close();
+		return c;
+	}
+	public static int countClient()throws Exception{
+		return Client.getListeClient().size()+1;
+	}
+	public String InsertClient(String nom,String email)throws Exception{
+		String val="";
+		try {
+			MongoDatabase db=new ConnectionMongo().connect();
+			MongoCollection<Document> coll=db.getCollection("client");
+			Document d=new Document();
+			d.put("_id", Client.countClient());
+			d.put("nom", nom);
+			d.put("email", email);
+			coll.insertOne(d);
+			val="Insertion reussi";
+		}catch(Exception e) {
+			val=e.getMessage();
+		}
+		return val;
+	}
 }
