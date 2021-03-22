@@ -64,7 +64,63 @@ POST:http://localhost:8080/admin/offre/sms/insert
     "idOffre":"9",
     "nbrSms":"10"
 }
+GET:http://localhost:8080/admin/offre
+token bearer:0bdafb21ea38b3921386707892692500 (anle Admin)
 
+GET:http://localhost:8080/admin/offre/details
+token bearer:0bdafb21ea38b3921386707892692500 (anle Admin)
+{
+    "idOffre":"4"
+}
+
+DELETE:http://localhost:8080/admin/offre/appel
+{
+    "idOffre":"2"
+}
+
+DELETE:http://localhost:8080/admin/offre/internet
+{
+    "idOffre":"2"
+}
+
+DELETE:http://localhost:8080/admin/offre/sms
+{
+    "idOffre":"2"
+}
+
+DELETE:http://localhost:8080/admin/offre
+{
+    "idOffre":"1"
+}
+
+PUT:http://localhost:8080/admin/offre
+{
+    "idOffre":"2",
+    "nom":"offre vaovao",
+    "code":"*999#",
+    "prix":"200",
+    "validite":"1"
+}
+
+PUT:http://localhost:8080/admin/offre/appel
+{
+    "idOAppel":"9",
+    "valeurTTC":"300",
+    "puMemeOp":"1",
+    "puAutreOp":"4"
+}
+
+PUT:http://localhost:8080/admin/offre/internet
+{
+    "idOInternet":"5",
+    "mo":"100"
+}
+
+PUT:http://localhost:8080/admin/offre/sms
+{
+    "idOSms":"3",
+    "nbrSms":"10"
+}
 
 
 

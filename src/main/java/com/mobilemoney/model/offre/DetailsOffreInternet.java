@@ -86,5 +86,74 @@ public class DetailsOffreInternet {
 		}
 		return  r;
 	}
-	
+	public static ArrayList<DetailsOffreInternet> getDetailsOffreInternet(int idOffre,Connection co) throws Exception{
+		String sql= "select * from detailOffreInternet where idOffre="+idOffre;
+		ArrayList<DetailsOffreInternet> details= DetailsOffreInternet.findAllDetailOffreInternet(sql, co);
+		return details;
+    }
+	public static Response deleteOffreInternet(String idOffre) throws Exception {
+		Connection co= new ConnectionPstg().getConnection();
+		Response r= new Response();
+		r.code= "200";
+		r.data=null;
+		int idOffre1= Integer.parseInt(idOffre);
+		PreparedStatement st = null;
+		try {
+			String sql= " delete from DetailOffreInternet where idOInternet=?";
+			st = co.prepareStatement(sql);
+			st.setInt(1,idOffre1);
+			st.execute();
+			co.commit();
+			r.data= null ;
+			r.message= "la forfait inetrnet supprimer";
+			
+		} catch (Exception e) {
+			r.code= "400";
+			r.message= e.getMessage();
+			e.printStackTrace();
+		} finally {
+			if(st != null) st.close();
+			if(co!=null) co.close();
+		}
+		return  r;
+	}
+	public static void upDateDetailsOffreInternet(String idOInternet, String mo,Connection co) throws Exception {
+		PreparedStatement st = null;
+		int idOInternet1= Integer.parseInt(idOInternet);
+		int mo1= Integer.parseInt(mo);
+		try {
+			String sql= "update detailOffreInternet set mo=? where idOInternet=?";
+			st = co.prepareStatement(sql);
+			st.setInt(1,mo1);
+			st.setInt(2,idOInternet1);
+			st.execute();
+			co.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(st != null) st.close();
+		}
+	}
+	public static Response updateDetailsOffreInternet(String idOInternet,String mo) throws Exception {
+		Connection co= new ConnectionPstg().getConnection();
+		Response r= new Response();
+		r.code= "200";
+		r.data=null;
+		PreparedStatement st = null;
+		try {
+			DetailsOffreInternet.upDateDetailsOffreInternet(idOInternet,mo, co);
+			String sql="select * from detailOffreInternet where idOInternet="+idOInternet;
+			r.data= DetailsOffreInternet.findAllDetailOffreInternet(sql,co);
+			r.message= "update offre Internet Effectuer";
+			
+		} catch (Exception e) {
+			r.code= "400";
+			r.message= e.getMessage();
+			e.printStackTrace();
+		} finally {
+			if(st != null) st.close();
+			if(co!=null) co.close();
+		}
+		return  r;
+	}
 }

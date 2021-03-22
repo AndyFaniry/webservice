@@ -4,8 +4,10 @@ package com.mobilemoney.controller;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
@@ -73,5 +75,60 @@ public class OperateurControlleur {
 		return DetailsOffreSms.insertOffreSms(idOffre,nbrSms);
 		
 	}
-	
+	@GetMapping(value="/admin/offre")
+	public Response getListeOffre(@RequestHeader("Authorization") String bearertoken) throws Exception {
+		String token= Token.deleteBearerToToken(bearertoken);
+		return Offre.getListeOffre(token);
+	}
+	@GetMapping(value="/admin/offre/details")
+	public Response getDetailsOffre(@RequestHeader("Authorization") String bearertoken,@RequestBody Map<String,String> donner) throws Exception {
+		String token= Token.deleteBearerToToken(bearertoken);
+		String idOffre= donner.get("idOffre");
+		return Offre.getDetailsOffre(idOffre);
+	}
+	@DeleteMapping(value="/admin/offre/appel")
+	public Response deleteDetailOffreAppel(@RequestBody Map<String,String> donner) throws Exception {
+		String idOffre= donner.get("idOffre");
+		return DetailsOffreAppel.deleteOffreAppel(idOffre);
+	}
+	@DeleteMapping(value="/admin/offre/internet")
+	public Response deleteDetailOffreInternet(@RequestBody Map<String,String> donner) throws Exception {
+		String idOffre= donner.get("idOffre");
+		return DetailsOffreInternet.deleteOffreInternet(idOffre);
+	}
+	@DeleteMapping(value="/admin/offre")
+	public Response deleteDetailOffreSms(@RequestBody Map<String,String> donner) throws Exception {
+		String idOffre= donner.get("idOffre");
+		return Offre.deleteOffre(idOffre);
+	}
+	@PutMapping(value="/admin/offre")
+	public Response updateDetailOffre(@RequestBody Map<String,String> donner) throws Exception {
+		String idOffre= donner.get("idOffre");
+		String nom= donner.get("nom");
+		String code= donner.get("code");
+		String prix= donner.get("prix");
+		String validite= donner.get("validite");
+		return Offre.updateOffre(idOffre, nom,code,prix,validite);
+	}
+	@PutMapping(value="/admin/offre/appel")
+	public Response updateDetailOffreAppel(@RequestBody Map<String,String> donner) throws Exception {
+		String idOAppel= donner.get("idOAppel");
+		String valeurTTC= donner.get("valeurTTC");
+		String puMemeOp= donner.get("puMemeOp");
+		String puAutreOp= donner.get("puAutreOp");
+		return DetailsOffreAppel.updateDetailsOffreAppel(idOAppel,valeurTTC,puMemeOp,puAutreOp);
+	}
+	@PutMapping(value="/admin/offre/internet")
+	public Response updateDetailOffreinternet(@RequestBody Map<String,String> donner) throws Exception {
+		String idOInternet= donner.get("idOInternet");
+		String mo= donner.get("mo");
+		return DetailsOffreInternet.updateDetailsOffreInternet(idOInternet,mo);
+	}
+	@PutMapping(value="/admin/offre/sms")
+	public Response updateDetailOffreSms(@RequestBody Map<String,String> donner) throws Exception {
+		String idOSms= donner.get("idOSms");
+		String nbrSms= donner.get("nbrSms");
+		return DetailsOffreSms.updateDetailsOffreSms(idOSms,nbrSms);
+	}
 }
+

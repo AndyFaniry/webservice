@@ -86,6 +86,75 @@ public class DetailsOffreSms {
 		}
 		return  r;
 	}
-	
+	public static ArrayList<DetailsOffreSms> getDetailsOffreSms(int idOffre,Connection co) throws Exception{
+		String sql= "select * from detailOffreSms where idOffre="+idOffre;
+		ArrayList<DetailsOffreSms> details= DetailsOffreSms.findAllDetailOffreSms(sql, co);
+		return details;
+    }
+	public static Response deleteOffreSms(String idOffre) throws Exception {
+		Connection co= new ConnectionPstg().getConnection();
+		Response r= new Response();
+		r.code= "200";
+		r.data=null;
+		int idOffre1= Integer.parseInt(idOffre);
+		PreparedStatement st = null;
+		try {
+			String sql= " delete from DetailOffreSms where idOSms=?";
+			st = co.prepareStatement(sql);
+			st.setInt(1,idOffre1);
+			st.execute();
+			co.commit();
+			r.data= null ;
+			r.message= "la forfait Sms supprimer";
+			
+		} catch (Exception e) {
+			r.code= "400";
+			r.message= e.getMessage();
+			e.printStackTrace();
+		} finally {
+			if(st != null) st.close();
+			if(co!=null) co.close();
+		}
+		return  r;
+	}
+	public static void upDateDetailsOffreSms(String idOSms, String nbrSms,Connection co) throws Exception {
+		PreparedStatement st = null;
+		int idOSms1= Integer.parseInt(idOSms);
+		int nbrSms1= Integer.parseInt(nbrSms);
+		try {
+			String sql= "update detailOffreSms set nbrSms=? where idOSms=?";
+			st = co.prepareStatement(sql);
+			st.setInt(1, nbrSms1);
+			st.setInt(2,idOSms1);
+			st.execute();
+			co.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(st != null) st.close();
+		}
+	}
+	public static Response updateDetailsOffreSms(String idOSms,String nbrSms) throws Exception {
+		Connection co= new ConnectionPstg().getConnection();
+		Response r= new Response();
+		r.code= "200";
+		r.data=null;
+		PreparedStatement st = null;
+		try {
+			DetailsOffreSms.upDateDetailsOffreSms(idOSms,nbrSms, co);
+			String sql="select * from detailOffreSms where idOSms="+idOSms;
+			r.data= DetailsOffreSms.findAllDetailOffreSms(sql,co);
+			r.message= "update offre Sms Effectuer";
+			
+		} catch (Exception e) {
+			r.code= "400";
+			r.message= e.getMessage();
+			e.printStackTrace();
+		} finally {
+			if(st != null) st.close();
+			if(co!=null) co.close();
+		}
+		return  r;
+	}
 
 }

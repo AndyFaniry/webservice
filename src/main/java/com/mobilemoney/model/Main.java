@@ -20,19 +20,16 @@ public class Main {
 		Connection co= new ConnectionPstg().getConnection();
 		String retour="debut";
 		try {
-			String token="7c81eb8f2a38f04b8b6820f7525f0231";
-			//String idOperateur= Token.verificationTokenAdmin(token, co);
+			String idOffre="2";
 			String nom= "offre vaovao Be2";
 			String code="*999*";
 			String prix="200";
 			String validite= "3";
-			//Response r= Offre.insertOffre(token,nom,code, prix,validite);
-			String sql="select * from detailOffreAppel";
-			ArrayList<DetailsOffreAppel> offre=  DetailsOffreAppel.findAllDetailOffreAppel(sql,co);
-			System.out.println(offre.size());
-			
-			//ArrayList<Offre> offre= findAllDetailOffreAppel(String sql,Connection co);
-			
+			String idOInternet="5";
+			String mo="30";
+			DetailsOffreInternet.upDateDetailsOffreInternet(idOInternet,mo,co);
+			//ArrayList<Offre> off= Offre.getOffreById(Integer.parseInt(idOffre),co);
+			//System.out.println("size= "+off.size());
 			
 		}
 		catch(Exception ex) {

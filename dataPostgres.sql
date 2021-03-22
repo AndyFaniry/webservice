@@ -45,7 +45,4 @@ insert into detailOffreSms(idOSms, idOffre,nbrSms) VALUES
 (nextval('seqDetailsOffreSms'),7,100),
 (nextval('seqDetailsOffreSms'),9,200);
 
-
 update mobileMoney set statu=1  where idMobileMoney=4;
-
-

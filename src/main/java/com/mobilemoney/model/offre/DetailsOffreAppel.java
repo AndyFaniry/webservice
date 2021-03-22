@@ -109,6 +109,78 @@ public class DetailsOffreAppel {
 		}
 		return  r;
 	}
-	
-
+	public static ArrayList<DetailsOffreAppel> getDetailsOffreAppel(int idOffre,Connection co) throws Exception{
+		String sql= "select * from detailOffreAppel where idOffre="+idOffre;
+		ArrayList<DetailsOffreAppel> details= DetailsOffreAppel.findAllDetailOffreAppel(sql, co);
+		return details;
+    }
+	public static Response deleteOffreAppel(String idOffre) throws Exception {
+		Connection co= new ConnectionPstg().getConnection();
+		Response r= new Response();
+		r.code= "200";
+		r.data=null;
+		int idOffre1= Integer.parseInt(idOffre);
+		PreparedStatement st = null;
+		try {
+			String sql= " delete from DetailOffreAppel where idOAppel=?";
+			st = co.prepareStatement(sql);
+			st.setInt(1,idOffre1);
+			st.execute();
+			co.commit();
+			r.data= null ;
+			r.message= "la forfait appel supprimer";
+			
+		} catch (Exception e) {
+			r.code= "400";
+			r.message= e.getMessage();
+			e.printStackTrace();
+		} finally {
+			if(st != null) st.close();
+			if(co!=null) co.close();
+		}
+		return  r;
+	}
+	public static void upDateDetailsOffreAppel(String idOAppel, String valeurTTC, String puMemeOp, String puAutreOp,Connection co) throws Exception {
+		PreparedStatement st = null;
+		int idOAppel1= Integer.parseInt(idOAppel);
+		int valeurTTC1= Integer.parseInt(valeurTTC);
+		int puMemeOp1= Integer.parseInt(puMemeOp);
+		int puAutreOp1= Integer.parseInt(puAutreOp);
+		try {
+			String sql= "update detailOffreAppel set valeurTTC=?, puMemeOp=?, puAutreOp=? where idOAppel=?";
+			st = co.prepareStatement(sql);
+			st.setInt(1,valeurTTC1);
+			st.setInt(2,puMemeOp1);
+			st.setInt(3,puAutreOp1);
+			st.setInt(4,idOAppel1);
+			st.execute();
+			co.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(st != null) st.close();
+		}
+	}
+	public static Response updateDetailsOffreAppel(String idOAppel,String valeurTTC,String puMemeOp,String puAutreOp) throws Exception {
+		Connection co= new ConnectionPstg().getConnection();
+		Response r= new Response();
+		r.code= "200";
+		r.data=null;
+		PreparedStatement st = null;
+		try {
+			DetailsOffreAppel.upDateDetailsOffreAppel(idOAppel,valeurTTC, puMemeOp,puAutreOp, co);
+			String sql="select * from detailOffreAppel where idOAppel="+idOAppel;
+			r.data= DetailsOffreAppel.findAllDetailOffreAppel(sql,co);
+			r.message= "update offre Appel Effectuer";
+			
+		} catch (Exception e) {
+			r.code= "400";
+			r.message= e.getMessage();
+			e.printStackTrace();
+		} finally {
+			if(st != null) st.close();
+			if(co!=null) co.close();
+		}
+		return  r;
+	}
 }

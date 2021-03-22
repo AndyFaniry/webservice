@@ -1,14 +1,10 @@
 package com.mobilemoney.controller;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mobilemoney.model.Client;
@@ -19,25 +15,26 @@ import com.mobilemoney.model.Response;
 @CrossOrigin(origins="*",allowedHeaders="*")
 @RestController
 public class ClientController {
+	
 	@Autowired
 	public ClientRepository clientRepository;
 	
 	@GetMapping("/client/findall")
-	public Response getAllClient() throws Exception{
+	public Response getAllClient(){
 		Response reponse= new Response();
-		reponse.data=Client.getListeClient();
+		reponse.data= clientRepository.findAll();
 		reponse.message= null;
 		reponse.code= "200" ;
 		return reponse;
 	}
 	
 	@PostMapping(value="/client/create")
-	public Response createClient(@RequestBody Map<String,String> nom,@RequestBody Map<String,String> email) throws Exception {
+	public Response createClient(@RequestBody Client client) {
 		Response reponse= new Response();
-		String insert=new Client().InsertClient(nom.get("nom"), email.get("email"));
-		reponse.data= null;
-		reponse.message= insert;
+		Client insertClient = clientRepository.insert(client);
+		reponse.data= insertClient;
+		reponse.message= null;
 		reponse.code= "200" ;
 		return reponse;
 	}
-} 
+}

@@ -91,8 +91,9 @@ alter table token add constraint FK_token_idCompte Foreign key (idCompte) refere
 alter table tokenAdmin add constraint FK_tokenAdmin_idOperateur Foreign key (idOperateur) references operateur(idOperateur);
 alter table mobileMoney add constraint FK_mobileMoney_idCompte Foreign key (idCompte) references compte(idCompte);
 alter table offre add constraint FK_offre_idOperateur Foreign key (idOperateur) references operateur(idOperateur);
-alter table detailOffreAppel add constraint FK_detailOffreAppel_idOperateur Foreign key (idOffre) references offre(idOffre);
-alter table detailOffreInternet add constraint FK_detailOffreInternet_idOperateur Foreign key (idOffre) references offre(idOffre);
+alter table detailOffreAppel add constraint FK_detailOffreAppel_idOperateur Foreign key (idOffre) references offre(idOffre) ON DELETE CASCADE;
+alter table detailOffreInternet add constraint FK_detailOffreInternet_idOperateur Foreign key (idOffre) references offre(idOffre) ON DELETE CASCADE;
+alter table detailOffreSms add constraint FK_detailOffreSms_idOperateur Foreign key (idOffre) references offre(idOffre) ON DELETE CASCADE;
 
 
 create view v_credit as select idCompte,sum(valeur) as valeur,max(daty) as daty from credit group by idCompte;
