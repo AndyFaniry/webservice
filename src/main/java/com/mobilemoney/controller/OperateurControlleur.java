@@ -144,5 +144,16 @@ public class OperateurControlleur {
 		String daty2= donner.get("daty2");
 		return Operateur.statDepot(token,"retrait",daty1,daty2);
 	}
+	@GetMapping(value="/admin/operateur")
+	public Response getOperateur(@RequestHeader("Authorization") String bearertoken) throws Exception {
+		String token= Token.deleteBearerToToken(bearertoken);
+		return Operateur.getOperateur(token);
+	}
+	@PostMapping(value="/admin/check")
+	public Response check(@RequestHeader("Authorization") String bearertoken,@RequestBody Map<String,String> mdp) throws Exception {
+		String token= Token.deleteBearerToToken(bearertoken);
+		String md=mdp.get("mdp");
+		return Operateur.checkMdp(token, md);
+	}
 }
 

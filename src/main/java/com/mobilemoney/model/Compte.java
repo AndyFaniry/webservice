@@ -90,33 +90,72 @@ public class Compte {
     }
 	public static Compte valideLogin(String num, String mdp, Connection co) throws Exception {
 		String sql= "select * from Compte where num='"+num+"' and mdp=md5('@client123"+mdp+"')";
-		System.out.println(sql);
 		ArrayList<Compte> comptes= Compte.findAllCompte(sql, co);
 		if(comptes.size()!=1) throw new Exception("mot de passe ou numero non valide");
 		return comptes.get(0);
 	}
-	
-	public Compte insertCompte(Connection co) throws Exception {
+	public static Compte findCompteById(int id,Connection co) throws Exception {
+		String sql= "select * from Compte where idcompte="+id;
+		ArrayList<Compte> comptes= Compte.findAllCompte(sql, co);
+		if(comptes.size()!=1) throw new Exception("compte invalide");
+		co.close();
+		return comptes.get(0);
+	}
+	public static Response getCompte(int id) throws Exception {
+		Connection co=new ConnectionPstg().getConnection();
+		Response res=new Response();
+		try {
+			res.data= Compte.findCompteById(id, co);
+			res.message= "compte";
+			res.code="200";
+		} catch (Exception e) {
+			res.code="400";
+			res.message= e.getMessage();
+		} finally {
+			if(co != null) co.close();
+		}
+		return res;
+	}
+	public void insert(Connection co)throws Exception{
 		PreparedStatement st = null;
 		try {
-			boolean b=true;
-			//this.checkClient(this.getIdClient())
-			if(b) {
-				String sql= "insert into compte(idCompte,idClient,num,mdp) VALUES (nextval('seqCompte'),?,?,md5(?))";
+				String sql= "insert into compte(idCompte,idClient,idoperateur,num,mdp) VALUES (nextval('seqCompte'),?,?,?,md5(?))";
 				st = co.prepareStatement(sql);
 				st.setInt(1,this.getIdClient());
-				st.setString(2,this.getNum());
-				st.setString(3,"@client123"+this.getMdp());
+				st.setInt(2, this.getIdOperateur());
+				st.setString(3,this.getNum());
+				st.setString(4,"@client123"+this.getMdp());
 				st.execute();
 				co.commit();
-			}
-			else throw new Exception("vous n'est pas parmis nos client");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			if(st != null) st.close();
 		}
-		return this;
+	}
+	
+	public Response insertCompte(String nm,String mail) throws Exception {
+		Connection co=new ConnectionPstg().getConnection();
+		Response res=new Response();
+		try {
+			Client cl=Client.findClient(nm, mail);
+			if(cl!=null) {
+				this.insert(co);
+			}
+			else {
+				Client.InsertClient(nm, mail);
+				this.insert(co);
+			}
+			res.data= this;
+			res.message= "compte inserer";
+			res.code="200";
+		} catch (Exception e) {
+			res.code="400";
+			res.message= e.getMessage();
+		} finally {
+			if(co != null) co.close();
+		}
+		return res;
 	}
 	public Response login() throws Exception {
 		Connection co= new ConnectionPstg().getConnection();
