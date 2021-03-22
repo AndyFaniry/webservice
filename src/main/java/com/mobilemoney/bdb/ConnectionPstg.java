@@ -23,8 +23,8 @@ public class ConnectionPstg {
             
             try{
                 Class.forName("org.postgresql.Driver");
-                this.co = DriverManager.getConnection("jdbc:postgresql://localhost:5432/mobilepostgres",
-                   "postgres", "root");
+                this.co = DriverManager.getConnection("jdbc:postgresql://ec2-54-155-35-88.eu-west-1.compute.amazonaws.com:5432/d6ffhaoav331nd",
+                   "cmnssbokuojoyd", "a92a451fcf24df85597d95be05b5212b09b9f3bd1d38eeac7df365fd763f1a9d");
                 this.stmt = this.co.createStatement();
                 this.co.setAutoCommit(false);
             }catch(Exception e){

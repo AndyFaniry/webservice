@@ -29,21 +29,21 @@ create sequence seqInternet start 1;
 create table internet(
     idInternet int primary key,
     idCompte int not null,
-    valeur int check >0,
-    daty dateTime 
+    valeur int check (valeur>0),
+    daty timestamp 
 );
 create sequence seqAppel start 1;
 create table appel(
     idAppel int primary key,
     idCompte int not null,
-    valeur int check >0,
-    daty dateTime 
+    valeur int check (valeur>0),
+    daty timestamp 
 );
 create sequence seqMobileMoney start 1;
 create table mobileMoney(
     idMobileMoney int primary key,
     idCompte int not null,
-    valeur int check (valeur)>0),
+    valeur int check (valeur>0),
     daty timestamp,
     statu int check(statu=1 or statu=1)
 );
@@ -52,18 +52,18 @@ create sequence seqOffreAppel start 1;
 create table offreAppel(
     idOffreAppel int primary key,
     idOperateur varchar(2),
-    prix int check >0,
-    valeur number(10) check >0,
-    daty dateTime 
+    prix int check (valeur>0),
+    valeur numeric(10) check (valeur>0),
+    daty timestamp 
 );
 
 create sequence seqOffreInternet start 1;
 create table offreInternet(
     idOffreInternet int primary key,
     idOperateur varchar(2),
-    prix int check >0,
-    valeur number(5) check >0,
-    daty dateTime 
+    prix int check (valeur>0),
+    valeur numeric(5) check (valeur>0),
+    daty timestamp 
 );
 
 create sequence seqToken start 1;
