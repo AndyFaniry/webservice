@@ -20,16 +20,13 @@ public class Main {
 		Connection co= new ConnectionPstg().getConnection();
 		String retour="debut";
 		try {
-			String idOffre="2";
-			String nom= "offre vaovao Be2";
-			String code="*999*";
-			String prix="200";
-			String validite= "3";
-			String idOInternet="5";
-			String mo="30";
-			DetailsOffreInternet.upDateDetailsOffreInternet(idOInternet,mo,co);
-			//ArrayList<Offre> off= Offre.getOffreById(Integer.parseInt(idOffre),co);
-			//System.out.println("size= "+off.size());
+			String token="0bdafb21ea38b3921386707892692500";
+			String daty1="2021-03-18";
+			String daty2="2021-03-20";
+			ArrayList<MouvementMoney> depot= Operateur.getDepotEffectuer(token,daty1,daty2,co);
+			for(int i=0; i<depot.size(); i++) {
+				System.out.println("size= "+((MouvementMoney)depot.get(i)).getValeur());
+			}
 			
 		}
 		catch(Exception ex) {

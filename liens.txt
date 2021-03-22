@@ -121,6 +121,17 @@ PUT:http://localhost:8080/admin/offre/sms
     "idOSms":"3",
     "nbrSms":"10"
 }
+GET:http://localhost:8080/admin/stat/depot
+Bearer Toke:0bdafb21ea38b3921386707892692500
+{
+    "daty1":"2021-03-18",
+    "daty2":"2021-03-20"
+}
 
-
+GET:http://localhost:8080/admin/stat/retrait
+Bearer Toke:0bdafb21ea38b3921386707892692500
+{
+    "daty1":"2021-03-18",
+    "daty2":"2021-03-20"
+}
 

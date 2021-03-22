@@ -120,3 +120,22 @@ operateur.nom
 from mobileMoney join compte on (mobileMoney.idCompte=compte.idCompte)
 join operateur on (operateur.idOperateur=compte.idOperateur) 
 where valeur<0 and statu=0;
+
+create view v_depot_valide as 
+select mobileMoney.*,
+compte.num,compte.idOperateur,
+operateur.nom 
+from mobileMoney join compte on (mobileMoney.idCompte=compte.idCompte)
+join operateur on (operateur.idOperateur=compte.idOperateur) 
+where valeur>0 and statu=1;
+
+create view v_retrait_valide as 
+select mobileMoney.*,
+compte.num,compte.idOperateur,
+operateur.nom 
+from mobileMoney join compte on (mobileMoney.idCompte=compte.idCompte)
+join operateur on (operateur.idOperateur=compte.idOperateur) 
+where valeur<0 and statu=1;
+
+
+select * from v_depot_valide where daty>'2021-03-18' and daty<'2021-03-20';

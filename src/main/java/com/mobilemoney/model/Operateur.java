@@ -201,5 +201,41 @@ public class Operateur {
 		return reponse;
 		
 	}
-	
+	public static ArrayList<MouvementMoney> getDepotEffectuer(String token,String daty1, String daty2,Connection co) throws Exception {
+		ArrayList<MouvementMoney> val= new ArrayList<MouvementMoney>();
+		String idOperateur= Token.verificationTokenAdmin(token,co);
+		String sql="select * from v_depot_valide where idOperateur="+idOperateur+" and daty>'"+daty1+"' and daty<'"+daty2+"'";
+		System.out.println("sql andramana="+sql);
+		val= MouvementMoney.findMouvementMoney(sql,co);
+		return val;
+	}
+	public static ArrayList<MouvementMoney> getRetraitEffectuer(String token,String daty1, String daty2,Connection co) throws Exception {
+		ArrayList<MouvementMoney> val= new ArrayList<MouvementMoney>();
+		String idOperateur= Token.verificationTokenAdmin(token,co);
+		String sql="select * from v_retrait_valide where idOperateur="+idOperateur+" and date(daty)>='"+daty1+"' and date(daty)<='"+daty2+"'";
+		System.out.println("sql andramana="+sql);
+		val= MouvementMoney.findMouvementMoney(sql,co);
+		return val;
+	}
+	public static Response statDepot(String token,String type, String daty1, String daty2) throws Exception{
+		Connection co= new ConnectionPstg().getConnection();
+		Response reponse= new Response();
+		try {
+			ArrayList<MouvementMoney> mouvs=  new ArrayList<MouvementMoney>();
+			if(type.compareTo("depot")==0) mouvs= Operateur.getDepotEffectuer(token,daty1,daty2,co);
+			else mouvs= Operateur.getRetraitEffectuer(token,daty1,daty2,co);
+			reponse.data= mouvs;
+			reponse.message= "mouvement valider";
+			reponse.code="200";
+		}
+		catch(Exception ex) {
+			reponse.code="400";
+			reponse.message= ex.getMessage();
+		}
+		finally {
+			if(co != null) co.close();
+		}
+		return reponse;
+		
+	}
 }

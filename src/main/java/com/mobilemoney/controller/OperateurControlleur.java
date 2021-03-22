@@ -130,5 +130,19 @@ public class OperateurControlleur {
 		String nbrSms= donner.get("nbrSms");
 		return DetailsOffreSms.updateDetailsOffreSms(idOSms,nbrSms);
 	}
+	@GetMapping(value="/admin/stat/depot")
+	public Response satistiqueDepot(@RequestHeader("Authorization") String bearertoken,@RequestBody Map<String,String> donner) throws Exception {
+		String token= Token.deleteBearerToToken(bearertoken);
+		String daty1= donner.get("daty1");
+		String daty2= donner.get("daty2");
+		return Operateur.statDepot(token,"depot",daty1,daty2);
+	}
+	@GetMapping(value="/admin/stat/retrait")
+	public Response satistiqueRetrait(@RequestHeader("Authorization") String bearertoken,@RequestBody Map<String,String> donner) throws Exception {
+		String token= Token.deleteBearerToToken(bearertoken);
+		String daty1= donner.get("daty1");
+		String daty2= donner.get("daty2");
+		return Operateur.statDepot(token,"retrait",daty1,daty2);
+	}
 }
 
